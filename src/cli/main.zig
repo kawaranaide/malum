@@ -1,72 +1,46 @@
 const std = @import("std");
-const opt = @import("opt");
 const warn = std.debug.warn;
 
 const Nix = struct {
-    var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
-    const allocator = arena.allocator();
-
     const Self = @This();
 
     const useNet: bool = true;
     const refresh: bool = false;
-    const helpRequested: bool = false;
     const showVersion: bool = false;
 
-    const Args = enum {
+    const args = enum {
         help,
         version,
         offline,
         refresh,
     };
 
-    const flags = [_]opt.Flag(Args){
+    const flags = struct {
         .{
-            .name = Args.help,
+            .name = Self.args.help,
             .long = "help",
         },
 
         .{
-            .name = Args.version,
+            .name = Self.args.version,
             .long = "version",
         },
 
         .{
-            .name = Args.offline,
+            .name = Self.args.offline,
             .long = "offline",
         },
 
         .{
-            .name = Args.refresh,
+            .name = Self.args.refresh,
             .long = "refresh",
         },
     };
 };
 
 pub fn main() anyerror!u8 {
-    const nix: Nix = .{};
-    var iterator = opt.FlagIterator(nix.flags).init(nix.flags[0..]);
-
-    while (iterator.next_flag() catch {
-        return 0;
-    }) |flag| {
-        switch (flag.name) {
-            Nix.Args.help => {
-                warn("to be implemented");
-                return 0;
-            },
-            Nix.Args.version => {
-                warn("to be implemented");
-                return 0;
-            },
-            Nix.Args.offline => {
-                warn("to be implemented");
-                return 0;
-            },
-            Nix.Args.refresh => {
-                warn("to be implemented");
-                return 0;
-            },
-        }
+    for (std.os.argv) |arg| {
+        std.debug.print("  {s}\n", .{arg});
     }
+    return 1;
 }

@@ -117,7 +117,7 @@ pub fn FlagIterator(comptime T: type) type {
         fn next_long(self: *FlagIterator(T)) !?FlagValue(T) {
             const curr = self.argv[self.count];
             var eqindex = curr.len;
-            for (curr) |ch, i| {
+            for (curr, 0..) |ch, i| {
                 if (ch == '=') {
                     eqindex = i;
                     break;
@@ -227,7 +227,7 @@ pub fn FlagIterator(comptime T: type) type {
             // Handle --
             if (curr[1] == '-') {
                 var eqindex = curr.len;
-                for (curr) |ch, i| {
+                for (curr, 0..) |ch, i| {
                     if (ch == '=') {
                         eqindex = i;
                         break;
@@ -244,7 +244,7 @@ pub fn FlagIterator(comptime T: type) type {
                 return false;
             }
             // Handle -
-            for (curr) |ch, i| {
+            for (curr, 0..) |ch, i| {
                 // 0 index is always -
                 if (i == 0) continue;
                 const opt_flag = self.flag_from_short(ch);
